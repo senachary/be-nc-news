@@ -1,4 +1,5 @@
 const { selectTopics } = require("../models/articles-model")
+const endpoints = require("../endpoints.json")
 
 function getTopics(req, res, next) {
     selectTopics(req.query)
@@ -7,6 +8,10 @@ function getTopics(req, res, next) {
         }).catch((err) => {
             next(err);
         });
+};
+
+function getEndpoints(req, res, next) {
+    res.status(200).send(endpoints)
 };
 
 
@@ -21,4 +26,4 @@ function getTopics(req, res, next) {
 
 
 
-module.exports = {getTopics}
+module.exports = {getTopics, getEndpoints}
