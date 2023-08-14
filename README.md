@@ -1,3 +1,8 @@
-# Northcoders News API
+# How to Connect to the Databases
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+You will need to add in two .env files for testing & development as below:
+
+- `.env.development`
+- `.env.test`
+
+You must set `PGDATABASE=` in each of these files to their respective databases, and then run `npm run seed`
