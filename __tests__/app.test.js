@@ -70,3 +70,44 @@ describe("GET /api/articles/:article_id", () => (
         })
     })
 ));
+
+describe("POST /api/articles/:article_id/comments", () => {
+    describe("Connect to path", () => {
+        test("Should return 201': 'Created' when connecting to path", () => {
+            const testComment = {
+                author: "butter_bridge",
+                body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            }
+            return request(app).post("/api/articles/1/comments").send(testComment).expect(201)
+        })
+        test("Should respond with the posted comment with the comment properties", () => {
+            const testComment = {
+                author: "butter_bridge",
+                body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            }
+            return request(app).post("/api/articles/1/comments").send(testComment)
+                .then(({ body: { post } }) => {
+                    expect(post).toMatchObject({
+                        author: expect.any(String),
+                        body: expect.any(String),
+                        votes: expect.any(Number),
+                        created_at: expect.any(String),
+                        article_id: expect.any(Number),
+                        comment_id: expect.any(Number)
+                })
+            })
+        })
+    })
+    describe("Errors for POST", () => {
+        test("Returns 404 if article not found", () => {
+            const testComment = {
+                author: "test_user",
+                body: "test_body",
+            }
+            return request(app).post("/api/articles/5555/comments").send(testComment).expect(404)
+                .then(({ body: { msg } }) => {
+                expect(msg).toBe("article does not exist")
+            })
+        })
+    })
+})
