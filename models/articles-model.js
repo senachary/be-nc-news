@@ -18,6 +18,12 @@ function retrieveArticles(article_id) {
     })
 }
 
+function retrieveUsers() {
+    return connection.query("SELECT * FROM users")
+        .then(({ rows }) => {
+            return rows
+    })
+}
 
 
 
@@ -29,4 +35,5 @@ function retrieveArticles(article_id) {
 
 
 
-module.exports = {selectTopics, retrieveArticles}
+
+module.exports = {selectTopics, retrieveArticles, retrieveUsers}

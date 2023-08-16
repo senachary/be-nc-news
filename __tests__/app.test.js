@@ -70,3 +70,21 @@ describe("GET /api/articles/:article_id", () => (
         })
     })
 ));
+
+describe("GET /api/users", () => {
+    describe("Connecting to path", () => {
+        test("Should return status 200", () => {
+            return request(app).get("/api/users").expect(200)
+        });
+        test("Should return the correct data", () => {
+            return request(app).get("/api/users")
+                .then(({ body: { users } }) => {
+                    users.forEach((user) => {
+                        expect(user).toHaveProperty("username", expect.any(String))
+                        expect(user).toHaveProperty("name", expect.any(String))
+                        expect(user).toHaveProperty("avatar_url", expect.any(String))
+                    });
+                });
+        });
+    });
+})

@@ -1,4 +1,4 @@
-const { selectTopics, retrieveArticles } = require("../models/articles-model")
+const { selectTopics, retrieveArticles, retrieveUsers } = require("../models/articles-model")
 
 function getTopics(req, res, next) {
     selectTopics(req.query)
@@ -20,6 +20,15 @@ function getArticles(req, res, next) {
 
 
 
+function getUsers(_, res, next) {
+    retrieveUsers()
+    .then((users) => {
+            res.status(200).send({users})
+    })
+    .catch((err) => {
+            next(err);
+        });
+};
 
 
 
@@ -29,5 +38,4 @@ function getArticles(req, res, next) {
 
 
 
-
-module.exports = {getTopics, getArticles}
+module.exports = {getTopics, getArticles, getUsers}

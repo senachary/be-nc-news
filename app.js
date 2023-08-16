@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const {getTopics, getArticles} = require("./controllers/articles-controller")
+const {getTopics, getArticles, getUsers} = require("./controllers/articles-controller")
 const {customErrorHandler, psqlErrorHandler} = require("./controllers/error-handler")
 
 app.use(express.json());
@@ -9,7 +9,7 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticles)
 
-
+app.get("/api/users", getUsers)
 
 
 
