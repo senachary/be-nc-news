@@ -18,6 +18,18 @@ function retrieveArticles(article_id) {
     })
 }
 
+function removeComment(comment_id) {
+    return connection.query(`DELETE FROM comments
+                            WHERE comment_id = $1
+                            RETURNING *;`, [comment_id])
+        .then(({ rows }) => {
+            if (!rows.length) {
+                return Promise.reject({status: 404, message: "comment does not exist"})
+            } else {
+                return Promise.resolve()
+            }
+    })
+}
 
 
 
@@ -28,5 +40,4 @@ function retrieveArticles(article_id) {
 
 
 
-
-module.exports = {selectTopics, retrieveArticles}
+module.exports = {selectTopics, retrieveArticles, removeComment}

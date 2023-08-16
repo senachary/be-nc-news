@@ -1,4 +1,4 @@
-const { selectTopics, retrieveArticles } = require("../models/articles-model")
+const { selectTopics, retrieveArticles, removeComment } = require("../models/articles-model")
 
 function getTopics(req, res, next) {
     selectTopics(req.query)
@@ -19,6 +19,16 @@ function getArticles(req, res, next) {
 };
 
 
+function deleteComment(req, res, next) {
+    const { comment_id } = req.params;
+    removeComment(comment_id)
+    .then(() => {
+        res.status(204).send()
+    })
+    .catch((err) => {
+        next(err);
+    });
+}
 
 
 
@@ -29,5 +39,4 @@ function getArticles(req, res, next) {
 
 
 
-
-module.exports = {getTopics, getArticles}
+module.exports = {getTopics, getArticles, deleteComment}
