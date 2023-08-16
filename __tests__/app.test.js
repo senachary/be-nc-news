@@ -3,6 +3,7 @@ const request = require("supertest");
 const connection = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
+const { updateArticle } = require("../models/articles-model");
 
 afterAll(() => {
     return connection.end()
@@ -70,3 +71,63 @@ describe("GET /api/articles/:article_id", () => (
         })
     })
 ));
+
+describe("PATCH /api/articles/:article_id", () => {
+    describe("Connecting to path", () => {
+        test("Should return status 200 ", () => {
+            return request(app).patch("/api/articles/1").send({ inc_votes : 1 }).expect(200)
+        })
+        test("Should return the updated article if patch successful: increase votes", () => {
+            const testUpdate = {
+                title: "Living in the shadow of a great man",
+                topic: "mitch",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
+                created_at: "2020-07-09T20:11:00.000Z",
+                votes: 101,
+                article_img_url:
+                  "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            }
+            return request(app).patch("/api/articles/1").send({ inc_votes: 1 })
+                .then(({ body: { updatedArticle } }) => {
+                expect(updatedArticle).toMatchObject(testUpdate)
+            })
+        })
+        test("Should return the updated article if patch successful: decrease votes", () => {
+            const testUpdate = {
+                title: "Living in the shadow of a great man",
+                topic: "mitch",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
+                created_at: "2020-07-09T20:11:00.000Z",
+                votes: 99,
+                article_img_url:
+                  "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            }
+            return request(app).patch("/api/articles/1").send({ inc_votes: -1 })
+                .then(({ body: { updatedArticle } }) => {
+                expect(updatedArticle).toMatchObject(testUpdate)
+            })
+        })
+    })
+    describe("PATCH Errors", () => {
+        test("Should return status 400 for invalid request ", () => {
+            return request(app).patch("/api/articles/invalid").send({ inc_votes: 1 }).expect(400)
+                .then(({ body: {msg} }) => {
+                expect(msg).toBe("Bad Request")
+            })
+        })
+        test("Should return status 400 for valid request with incorrect property", () => {
+            return request(app).patch("/api/articles/invalid").send({ invalid: 1 }).expect(400)
+                .then(({ body: {msg} }) => {
+                expect(msg).toBe("Bad Request")
+            })
+        })
+        test("Should return status 404 if valid request sent but article does not exist", () => {
+            return request(app).patch("/api/articles/555").send({ inc_votes: 1 }).expect(404)
+                .then(({ body: {msg} }) => {
+                expect(msg).toBe("article does not exist")
+            })
+        })
+    })
+})

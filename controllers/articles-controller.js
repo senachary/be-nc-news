@@ -1,4 +1,4 @@
-const { selectTopics, retrieveArticles } = require("../models/articles-model")
+const { selectTopics, retrieveArticles, updateArticle } = require("../models/articles-model")
 
 function getTopics(req, res, next) {
     selectTopics(req.query)
@@ -24,10 +24,20 @@ function getArticles(req, res, next) {
 
 
 
+function patchArticle(req, res, next) {
+    const { article_id } = req.params
+    const { body } = req
+    
+    updateArticle(article_id, body)
+        .then((updatedData) => {
+        res.status(200).send({updatedArticle: updatedData})
+    }).catch((err) => {
+        next(err);
+    });
+}
 
 
 
 
 
-
-module.exports = {getTopics, getArticles}
+module.exports = {getTopics, getArticles, patchArticle}
