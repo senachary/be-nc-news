@@ -1,4 +1,6 @@
-const { selectTopics, retrieveArticles } = require("../models/articles-model")
+const { request } = require("../app");
+const comments = require("../db/data/test-data/comments");
+const { selectTopics, retrieveArticles, newComment } = require("../models/articles-model")
 
 function getTopics(req, res, next) {
     selectTopics(req.query)
@@ -19,6 +21,23 @@ function getArticles(req, res, next) {
 };
 
 
+function postComment(req, res, next) {
+    const { article_id } = req.params;
+    const { body } = req;
+    
+    const promises = [
+        retrieveArticles(article_id),
+        newComment(article_id, body)
+    ];
+
+    return Promise.all(promises)
+        .then((promisesData) => {
+            res.status(201).send({ post: promisesData[1] });
+            
+        }).catch((err) => {
+            next(err);
+        });
+};
 
 
 
@@ -27,7 +46,4 @@ function getArticles(req, res, next) {
 
 
 
-
-
-
-module.exports = {getTopics, getArticles}
+module.exports = {getTopics, getArticles, postComment}

@@ -1,6 +1,7 @@
 const connection = require("../db/connection");
 const format = require("pg-format");
 
+
 function selectTopics() {
     return connection.query(`SELECT * from topics;`)
         .then(({ rows }) => {
@@ -18,6 +19,27 @@ function retrieveArticles(article_id) {
     })
 }
 
+function newComment(article_id, article_body) {
+    
+    const formattedComment = [
+        article_body.body,
+        article_id,
+        article_body.author,
+        0,
+        new Date().toISOString()
+    ]
+
+    const queryString = format(
+        `INSERT INTO comments
+        (body, article_id, author, votes, created_at)
+        VALUES %L
+        RETURNING *;`, [formattedComment]);
+    
+    return connection.query(queryString)
+        .then(({ rows }) => {
+        return rows[0]
+    })
+}
 
 
 
@@ -28,5 +50,4 @@ function retrieveArticles(article_id) {
 
 
 
-
-module.exports = {selectTopics, retrieveArticles}
+module.exports = {selectTopics, retrieveArticles, newComment}
