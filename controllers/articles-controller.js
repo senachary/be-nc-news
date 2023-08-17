@@ -1,7 +1,7 @@
 
 
 const endpoints = require("../endpoints.json")
-const { selectTopics, retrieveArticles, selectAllArticles, removeComment } = require("../models/articles-model")
+const { selectTopics, retrieveArticles, selectAllArticles, removeComment, updateArticle } = require("../models/articles-model")
 
 
 function getTopics(req, res, next) {
@@ -53,10 +53,22 @@ function deleteComment(req, res, next) {
 
 
 
+function patchArticle(req, res, next) {
+    const { article_id } = req.params
+    const { body } = req
+    
+    updateArticle(article_id, body)
+        .then((updatedData) => {
+        res.status(200).send({updatedArticle: updatedData})
+    }).catch((err) => {
+        next(err);
+    });
+}
 
 
 
 
 
-module.exports = {getTopics, getArticles, getEndpoints, getAllArticles, deleteComment}
+
+module.exports = {getTopics, getArticles, getEndpoints, getAllArticles, deleteComment, patchArticle}
 
