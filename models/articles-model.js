@@ -28,5 +28,5 @@ function retrieveArticles(article_id) {
 
 
 
-
 module.exports = {selectTopics, retrieveArticles}
+
