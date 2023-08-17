@@ -1,5 +1,7 @@
-const { selectTopics } = require("../models/articles-model")
+
 const endpoints = require("../endpoints.json")
+const { selectTopics, retrieveArticles } = require("../models/articles-model")
+
 
 function getTopics(req, res, next) {
     selectTopics(req.query)
@@ -10,8 +12,18 @@ function getTopics(req, res, next) {
         });
 };
 
+
 function getEndpoints(req, res, next) {
     res.status(200).send(endpoints)
+
+function getArticles(req, res, next) {
+    retrieveArticles(req.params.article_id)
+        .then((article) => {
+            res.status(200).send({article});
+        }).catch((err) => {
+            next(err);
+        });
+
 };
 
 
@@ -26,4 +38,6 @@ function getEndpoints(req, res, next) {
 
 
 
-module.exports = {getTopics, getEndpoints}
+
+module.exports = {getTopics, getArticles, getEndpoints}
+
