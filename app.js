@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 
 
-const {getTopics, getArticles, getEndpoints, getAllArticles} = require("./controllers/articles-controller")
+const {getTopics, getArticles, getEndpoints, getAllArticles, deleteComment} = require("./controllers/articles-controller")
+
 const {customErrorHandler, psqlErrorHandler} = require("./controllers/error-handler")
 
 
@@ -19,7 +20,7 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticles)
 
 
-
+app.delete("/api/comments/:comment_id", deleteComment)
 
 
 app.use(psqlErrorHandler)

@@ -176,3 +176,31 @@ describe("GET api/articles", () => {
 ));
 
 
+describe("DELETE /api/comments/:comment_id", () => {
+    describe("Connecting to path", () => {
+        test("Should return status 204 for successful deletion", () => {
+            return request(app).delete("/api/comments/1").expect(204)
+        })
+        test("Should return no content for successful deletion", () => {
+            return request(app).delete("/api/comments/1")
+                .then(({ body }) => {
+                    expect(body).toEqual({})
+            })
+        })
+    })
+    describe("DELETE Errors", () => {
+        test("Should return a 404 if the comment is not found", () => {
+            return request(app).delete("/api/comments/9999").expect(404)
+                .then(({ body: {msg} }) => {
+                    expect(msg).toBe("comment does not exist")
+            })
+        })
+        test("Should return 400 for invalid request", () => {
+            return request(app).delete("/api/comments/invalid_request").expect(400)
+                .then(({ body: {msg} }) => {
+                    expect(msg).toBe("Bad Request")
+            })
+        })
+    })
+})
+
