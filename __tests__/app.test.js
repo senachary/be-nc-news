@@ -3,6 +3,7 @@ const request = require("supertest");
 const connection = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
+const endpoints = require("../endpoints.json")
 
 afterAll(() => {
   return connection.end();
@@ -48,11 +49,8 @@ describe("GET /api", () => {
       return request(app)
         .get("/api")
         .expect(200)
-        .then(({ body }) => {
-          expect(body["GET /api"]).toMatchObject({
-            description:
-              "serves up a json representation of all the available endpoints of the api",
-          });
+        .then(({ body}) => {
+          expect(body).toMatchObject({...endpoints});
         });
     });
     test("Should return the correct info for each endpoint (/api/topics)", () => {
