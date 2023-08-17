@@ -35,7 +35,7 @@ describe("GET api/topics", () => {
     });
 });
 
-describe.only("GET /api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
     describe("Connecting to path", () => {
         test("Should return status 200", () => {
             return request(app).get("/api/articles/1/comments").expect(200)
@@ -55,6 +55,26 @@ describe.only("GET /api/articles/:article_id/comments", () => {
             return request(app).get("/api/articles/1/comments").expect(200)
                 .then(({ body: { comments } }) => {
                     expect(comments).toBeSortedBy("created_at", { descending: true })
+            })
+        })
+    })
+    describe("Errors", () => {
+        test("Should return 400: the article_id is invalid e.g. 'not-an-id'", () => {
+            return request(app).get("/api/articles/invalid/comments").expect(400)
+                .then(({ body: { msg } }) => {
+                expect(msg).toBe("Bad Request")
+            })
+        })
+        test("Should return 404: the article_id is not present in the database e.g. 9999", () => {
+            return request(app).get("/api/articles/9999/comments").expect(404)
+                .then(({ body: { msg } }) => {
+                expect(msg).toBe("Not Found")
+            })
+        })
+        test("Should return 404: the article_id exists but there are no comments for that article", () => {
+            return request(app).get("/api/articles/2/comments").expect(404)
+                .then(({ body: { msg } }) => {
+                expect(msg).toBe("Not Found")
             })
         })
     })
