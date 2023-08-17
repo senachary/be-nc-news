@@ -1,26 +1,34 @@
 const express = require("express");
 const app = express();
-const {getTopics, getAllArticles} = require("./controllers/articles-controller")
 
 
-app.use(express.json());
+const {getTopics, getArticles, getEndpoints, getAllArticles} = require("./controllers/articles-controller")
+const {customErrorHandler, psqlErrorHandler} = require("./controllers/error-handler")
 
-app.get("/api/topics", getTopics);
+
 
 app.get("/api/articles", getAllArticles)
 
+app.use(express.json());
+
+app.get("/api", getEndpoints);
+
+
+app.get("/api/topics", getTopics);
+
+app.get("/api/articles/:article_id", getArticles)
 
 
 
 
 
+app.use(psqlErrorHandler)
 
-
+app.use(customErrorHandler)
 
 
 
 app.use((err, response, request, next) => {
-    console.log(err)
     response.status(500).send({msg: "Server Error"})
 })
 
