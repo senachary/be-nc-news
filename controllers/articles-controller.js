@@ -1,6 +1,7 @@
 
+
 const endpoints = require("../endpoints.json")
-const { selectTopics, retrieveArticles } = require("../models/articles-model")
+const { selectTopics, retrieveArticles, selectAllArticles } = require("../models/articles-model")
 
 
 function getTopics(req, res, next) {
@@ -12,6 +13,14 @@ function getTopics(req, res, next) {
         });
 };
 
+function getAllArticles(req, res, next) {
+    selectAllArticles()
+        .then((articles) => {
+            res.status(200).send({articles});
+        }).catch((err) => {
+            next(err);
+        });
+};
 
 function getEndpoints(req, res, next) {
     res.status(200).send(endpoints)
@@ -39,5 +48,4 @@ function getArticles(req, res, next) {
 
 
 
-module.exports = {getTopics, getArticles, getEndpoints}
-
+module.exports = {getTopics, getArticles, getEndpoints, getAllArticles}
