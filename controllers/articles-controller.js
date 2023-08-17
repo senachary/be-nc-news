@@ -22,8 +22,13 @@ function getArticles(req, res, next) {
 
 
 function postComment(req, res, next) {
+    
     const { article_id } = req.params;
     const { body } = req;
+
+    if (!body || !body.body) {
+        return res.status(400).send({msg: "Bad Request"})
+    }
     
     const promises = [
         retrieveArticles(article_id),

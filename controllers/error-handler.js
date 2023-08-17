@@ -2,7 +2,7 @@ function customErrorHandler(error, request, response, next) {
     if (error.status && error.message) {
         response.status(error.status).send({msg: error.message})
     } else {
-        next(err);
+        next(error);
     };
 };
 

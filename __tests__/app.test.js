@@ -97,6 +97,14 @@ describe("POST /api/articles/:article_id/comments", () => {
                 })
             })
         })
+        test("Should respond 201, and extra properties are ignored", () => {
+            const testComment = {
+                author: "butter_bridge",
+                body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                otherProperty: "someValue"
+            }
+            return request(app).post("/api/articles/1/comments").send(testComment).expect(201)
+        })
     })
     describe("Errors for POST", () => {
         test("Returns 404 if article not found", () => {
@@ -108,6 +116,25 @@ describe("POST /api/articles/:article_id/comments", () => {
                 .then(({ body: { msg } }) => {
                 expect(msg).toBe("article does not exist")
             })
+        })
+        test("Returns 400 where ID is invalid", () => {
+            const testComment = {
+                author: "butter_bridge",
+                body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            }
+            return request(app).post("/api/articles/invalid/comments").send(testComment).expect(400)
+                .then(({ body: { msg } }) => {
+                expect(msg).toBe("Bad Request")
+            })
+        })
+        test("Returns 400 where 'body' is missing", () => {
+            const testComment = {
+                author: "butter_bridge",
+            }
+            return request(app).post("/api/articles/1/comments").send(testComment).expect(400)
+                .then(({ body: { msg } }) => {
+                expect(msg).toBe("Bad Request")
+                })
         })
     })
 })
