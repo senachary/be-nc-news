@@ -99,16 +99,15 @@ describe("GET /api", () => {
   });
 });
 
-});
 
-describe("GET /api/articles/:article_id", () => (
+describe("GET /api/articles/:article_id", () => {
     describe("Connecting to path", () => {
         test("Should return status 200", () => {
             return request(app).get("/api/articles/1").expect(200)
         });
         test("Should return the correct data for specific article (1)", () => {
             return request(app).get("/api/articles/1").expect(200)
-                .then(({ body: {article} }) => {
+                .then(({ body: { article } }) => {
                     expect(article).toMatchObject({
                         article_id: 1,
                         title: "Living in the shadow of a great man",
@@ -118,13 +117,14 @@ describe("GET /api/articles/:article_id", () => (
                         created_at: "2020-07-09T20:11:00.000Z",
                         votes: 100,
                         article_img_url:
-                          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-                      })
+                            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+                    })
                 });
         });
 
-    });
-});
+    })
+})
+
 
 describe("GET api/articles", () => {
     describe("Connecting to path", () => {
@@ -164,20 +164,20 @@ describe("GET api/articles", () => {
     });
 })
 
-        test("Should return a 404 if article ID does not exist", () => {
-            return request(app).get("/api/articles/27").expect(404)
-                .then(({ body: { msg } }) => {
-                expect(msg).toBe("article does not exist")
-            })
-        })
-        test("Should return a bad request for non-article_id", () => {
-            return request(app).get("/api/articles/HELLO").expect(400)
-                .then(({ body: { msg } }) => {
-                expect(msg).toBe("Bad Request")
-            })
+describe("Errors", () => {
+    test("Should return a 404 if article ID does not exist", () => {
+        return request(app).get("/api/articles/27").expect(404)
+            .then(({ body: { msg } }) => {
+            expect(msg).toBe("article does not exist")
         })
     })
-));
+    test("Should return a bad request for non-article_id", () => {
+        return request(app).get("/api/articles/HELLO").expect(400)
+            .then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad Request")
+        })
+    })
+})
 
 
 describe("PATCH /api/articles/:article_id", () => {

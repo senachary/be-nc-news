@@ -24,6 +24,7 @@ function getAllArticles(req, res, next) {
 
 function getEndpoints(req, res, next) {
     res.status(200).send(endpoints)
+}
 
 function getArticles(req, res, next) {
     retrieveArticles(req.params.article_id)
