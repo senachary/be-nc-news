@@ -86,5 +86,11 @@ describe("GET /api/users", () => {
                     });
                 });
         });
+        test("Should return the correct data", () => {
+            return request(app).get("/api/users")
+                .then(({ body: { users } }) => {
+                    expect(users.length).toBe(4)
+                });
+        });
     });
 })
