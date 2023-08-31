@@ -21,9 +21,8 @@ function retrieveArticles(article_id) {
 
 function newComment(article_id, article_body) {
     
-    const criteria = ['author', 'body']
-    if (!criteria.every(objCriteria => Object.keys(article_body).includes(objCriteria))) {
-        return Promise.reject({status: 400, msg: "Bad Request"})
+    if (!article_body.body || !article_body.author) {
+        return Promise.reject({status: 400, msg: "There is no comment body"})
     }
     
     const formattedComment = [

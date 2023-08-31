@@ -27,7 +27,7 @@ function postComment(req, res, next) {
     const { body } = req;
 
     if (!body || !body.body) {
-        return res.status(400).send({msg: "Bad Request"})
+        return res.status(400).send({msg: "There is no comment body"})
     }
     
     const promises = [

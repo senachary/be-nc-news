@@ -109,7 +109,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     describe("Errors for POST", () => {
         test("Returns 404 if article not found", () => {
             const testComment = {
-                author: "test_user",
+                author: "butter_bridge",
                 body: "test_body",
             }
             return request(app).post("/api/articles/5555/comments").send(testComment).expect(404)
@@ -133,7 +133,17 @@ describe("POST /api/articles/:article_id/comments", () => {
             }
             return request(app).post("/api/articles/1/comments").send(testComment).expect(400)
                 .then(({ body: { msg } }) => {
-                expect(msg).toBe("Bad Request")
+                expect(msg).toBe("There is no comment body")
+                })
+        })
+        xtest("status 404 where the author doesn't exist in the database", () => {
+            const testComment = {
+                author: "invalid_user",
+                body: "test_body",
+            }
+            return request(app).post("/api/articles/1/comments").send(testComment).expect(404)
+            .then(({ body: { msg } }) => {
+            expect(msg).toBe("User not in database")
                 })
         })
     })
