@@ -6,13 +6,17 @@ function getComments(req, res, next) {
     selectComments(article_id)
         .then((comments) => {
             if (comments.length === 0) {
-                res.status(404).send({msg: "Not Found"})
+                 res.status(404).send({msg: "Not Found"})
             } else {
-                res.status(200).send({comments});
+                res.status(200).send({comments: comments});
         }
     })
         .catch((err) => {
-            next(err);
+            if (err.code === "22P02") {
+                res.status(400).send({msg: "Bad Request"});
+            } else {
+                next(err)
+            }
     });
 }
 
